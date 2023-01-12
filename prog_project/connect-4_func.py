@@ -58,8 +58,7 @@ def diagonalIsWin(originalCoord: int, player: int) -> bool:
     for i in range(l):
         try:
             if rows[c[0]-i][c[1]+i] == player: chain += 1
-            # checks if the point at 'rows[c[1]-i][c[0]+i]' is one of the player's
-            # piece, and add 1 to 'chain' if so
+            # checks if the point at 'rows[c[1]-i][c[0]+i]' is one of the player's piece
             if chain == winLenght: return True
             # stop the fonction and return True if there is an uniterupted line
             # of four of the player's piece
@@ -81,12 +80,12 @@ def diagonalIsWin(originalCoord: int, player: int) -> bool:
         try:
             if rows[c[0]+i][c[0]+i] == player: chain += 1
             # check if the point at 'rows[c[1]+i][c[0]+i]' is one of the player's
-            # piece, and add 1 to 'chain' if so
+            # piece
             if chain == winLenght: return True
             # stop the fonction and return True if ther is an uniterupted line
             # of the player's piece
         except IndexError: chain = 0
-        # if the point dosn't exist, catch the error, and reset 'chain' to 0
+        # if the point doesn't exist, catch the error, and reset 'chain' to 0
     return False
 
 def getGridDimentions() -> list:
