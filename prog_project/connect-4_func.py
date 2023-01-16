@@ -1,17 +1,17 @@
-def printGrid() -> None:
+def printGrid(grid: list, gridSize: list, symbols: list) -> None:
     """Print the grid in the CLI"""
-    for i in range(gridsize[1]): # prints row's numbers
+    for i in range(gridSize[1]): # prints row's numbers
         print(f' {i+1} ', end='')
     print('') # put the cursor bring the cursor down one line
-    for i in (abs(y) for y in range(-gridsize[0], 0)):
-    # make if so 'i' will iterate form 'gridsize[0]' to 0
+    for i in (abs(y) for y in range(-gridSize[0], 0)):
+    # make if so 'i' will iterate form 'gridSize[0]' to 0
         print('|', end='') 
-        for y in rows: # print each row, and places the corresponding symbol
+        for y in grid: # print each row, and places the corresponding symbol
             if len(y) >= i: print('', symbols[y[i-1]], end='|')
             else: print('  ', end='|')
         print('')
 
-def columnsIsWin(collumn, player) -> bool:
+def columnsIsWin(collumn, player, winLenght: int) -> bool:
     """Checks if the collumn just played contains an uninterupted line of 4
     player's points"""
     if len(collumn) >= 4:
@@ -25,14 +25,14 @@ def columnsIsWin(collumn, player) -> bool:
     return False
     # return a False if there is no uninterupted collumn of 4
 
-def rowIsWin(row, player) -> bool:
+def rowIsWin(row, player, grid: list, winLenght: int, gridSize: list) -> bool:
     """Checks if the row just played contains an uninterupted line of 4
     player's points"""
     chain = 0
     # variable to stock the uninterputed line
-    for i in range(gridsize[1]):
+    for i in range(gridSize[1]):
         try:
-            if rows[i][row] == player: chain += 1
+            if grid[i][row] == player: chain += 1
             else: chain = 0
             if chain == winLenght: return True
             # only pass the 'try' if the point is a player's point
@@ -40,25 +40,25 @@ def rowIsWin(row, player) -> bool:
     return False
     # return a False if there are no uninterupted diagonal of 4
 
-def diagonalIsWin(originalCoord: int, player: int) -> bool:
+def diagonalIsWin(originalCoord: int, player: int, grid: list, winLenght: int, gridSize: list) -> bool:
 
-    originalCoord = [originalCoord-1, len(rows[originalCoord-1])-1]
+    originalCoord = [originalCoord-1, len(grid[originalCoord-1])-1]
     # convert the number of the line played by the coordonates of the last piece
     c = originalCoord
     # create a copy of 'originalCoord', to be used in the next 10 lines of code
     chain = 0
     # initiate the counter for the lenght of uninterupted line of the player's pieces
-    l = min(gridsize[1]-c[0], c[1]+1)
+    l = min(gridSize[1]-c[0], c[1]+1)
     # the distance the cursor will have to travel to get to the base of the grid
     c = [c[0]+l-1, c[1]-l+1]
     # create the base coodinate for the right to left diagonal
-    l = min(c[0]+1, gridsize[0]-c[1])
+    l = min(c[0]+1, gridSize[0]-c[1])
     # the distance the cursor will have to travel to see the entire diagonal
     # to the tip of the grid
     for i in range(l):
         try:
-            if rows[c[0]-i][c[1]+i] == player: chain += 1
-            # checks if the point at 'rows[c[1]-i][c[0]+i]' is one of the player's piece
+            if grid[c[0]-i][c[1]+i] == player: chain += 1
+            # checks if the point at 'grid[c[1]-i][c[0]+i]' is one of the player's piece
             if chain == winLenght: return True
             # stop the fonction and return True if there is an uniterupted line
             # of four of the player's piece
@@ -73,13 +73,13 @@ def diagonalIsWin(originalCoord: int, player: int) -> bool:
     # the distance the cursor will have to travel to get to the base of the grid
     c = [c[0]-l+1, c[1]-l+1]
     # create the base coordonates for the left to right diagonal
-    l = min(gridsize[0]-c[0],gridsize[1]-c[1])
+    l = min(gridSize[0]-c[0],gridSize[1]-c[1])
     # the distance the cursor will have to travel to see the entire diagonal to 
     # the top of the grid
     for i in range(l):
         try:
-            if rows[c[0]+i][c[0]+i] == player: chain += 1
-            # check if the point at 'rows[c[1]+i][c[0]+i]' is one of the player's
+            if grid[c[0]+i][c[0]+i] == player: chain += 1
+            # check if the point at 'grid[c[1]+i][c[0]+i]' is one of the player's
             # piece
             if chain == winLenght: return True
             # stop the fonction and return True if ther is an uniterupted line
@@ -130,54 +130,57 @@ def endOfGame():
         else: print('Wrong input, please try again')
         # else, tell the players that the input is invald, and ask for another one
 
-while True: #SessionLoop
+def main():
+    while True: #SessionLoop
 
-    gridsize = getGridDimentions()
-    # get the grid dimention of the grid
-    if gridsize[0]*gridsize[1] < 7*6: winLenght = 3
-    # if the chozen size of the grid is smaller than the regular one, make the required
-    # winning lenght smaller
-    elif gridsize[0]*gridsize[1] > 7*6: winLenght = 5
-    # if the chozen size of the gris is smaller than the regulat one, make the required
-    # winning lenght smaller
-    else : winLenght = 4
-    rows = [[] for _ in range(gridsize[1])]
-    # create the 2D grid
-    symbols = [getPlayerSymbols(0), getPlayerSymbols(1)]
-    # list to store player's symbol 
-    playing  = 0
-    # initiate the variable holding the position of the playing player symbol in 'symbols'
+        gridSize = getGridDimentions()
+        # get the grid dimention of the grid
+        if gridSize[0]*gridSize[1] < 7*6: winLenght = 3
+        # if the chozen size of the grid is smaller than the regular one, make the required
+        # winning lenght smaller
+        elif gridSize[0]*gridSize[1] > 7*6: winLenght = 5
+        # if the chozen size of the gris is smaller than the regulat one, make the required
+        # winning lenght smaller
+        else : winLenght = 4
+        grid = [[] for _ in range(gridSize[1])]
+        # create the 2D grid
+        symbols = [getPlayerSymbols(0), getPlayerSymbols(1)]
+        # list to store player's symbol 
+        playing  = 0
+        # initiate the variable holding the position of the playing player symbol in 'symbols'
 
-    while True: # GameLoop
-        printGrid()
-        # print the actuated grid
-        while True: # PlayLoop
-            try:
-                coord = int(input(f"Player {playing+1} : "))
-                # get input from player
-            except ValueError: print('Wrong input, try again'); continue
-            # if 'coord' isn't a integer, ask the player for another input
-            if coord not in range(1,gridsize[1]+1): print('Wrong input, try again'); continue
-            # if 'coord' doesn't have the right value, ask the player for another input
-            fullCollumns = list(filter(lambda x: len(rows[x-1])==gridsize[0], [i for i in range(1,gridsize[1]+1)]))
-            # get the list of full collumn by comparing their lenght with the grid lenght 
-            if coord in fullCollumns: print('Full collumn, please inpyt another collumn'); continue
-            # if the collumn selected is full, ask the player for another input
-            break
-            # get out of the loop if 
+        while True: # GameLoop
+            printGrid(grid, gridSize, symbols)
+            # print the actuated grid
+            while True: # PlayLoop
+                try:
+                    coord = int(input(f"Player {playing+1} : "))
+                    # get input from player
+                except ValueError: print('Wrong input, try again'); continue
+                # if 'coord' isn't a integer, ask the player for another input
+                if coord not in range(1,gridSize[1]+1): print('Wrong input, try again'); continue
+                # if 'coord' doesn't have the right value, ask the player for another input
+                fullCollumns = list(filter(lambda x: len(grid[x-1])==gridSize[0], [i for i in range(1,gridSize[1]+1)]))
+                # get the list of full collumn by comparing their lenght with the grid lenght 
+                if coord in fullCollumns: print('Full collumn, please inpyt another collumn'); continue
+                # if the collumn selected is full, ask the player for another input
+                break
+                # get out of the loop if 
 
-        rows[coord - 1].append(playing)
-        # adds the player's piece to the collumn inputed
-        if rowIsWin(len(rows[coord - 1])-1, playing) or columnsIsWin(rows[coord - 1], playing) or diagonalIsWin(coord, playing):
-        # checks there is an uniterupted line of 4 point of the playing player
-            printGrid()
-            print(f'Player {playing+1} won !')
-            break
-        if fullCollumns == [i for i in range(1, gridsize[1]+1)]:
-            printGrid()
-            print('All collumns are full, this is a tie.')
-            break
-        playing = (playing + 1) % 2
-        # switch player (0 to 1 and 1 to 0)
-    if endOfGame(): continue
-    else: exit('See you next time :)')
+            grid[coord - 1].append(playing)
+            # adds the player's piece to the collumn inputed
+            if rowIsWin(len(grid[coord - 1])-1, playing, grid, winLenght, gridSize) or columnsIsWin(grid[coord - 1], playing, winLenght) or diagonalIsWin(coord, playing, grid, winLenght,gridSize):
+            # checks there is an uniterupted line of 4 point of the playing player
+                printGrid(grid, gridSize, symbols)
+                print(f'Player {playing+1} won !')
+                break
+            if fullCollumns == [i for i in range(1, gridSize[1]+1)]:
+                printGrid(grid)
+                print('All collumns are full, this is a tie.')
+                break
+            playing = (playing + 1) % 2
+            # switch player (0 to 1 and 1 to 0)
+        if endOfGame(): continue
+        else: exit('See you next time :)')
+
+main()
