@@ -48,7 +48,6 @@ class Board:
                 if len(y) >= i: print('',playerList[y[i-1]].symbol, end='|')
                 else: print('  ', end='|')
             print('')
-        print(self.grid)
 
     def checkForWin(self, index:int, coord: int) -> bool:
         '''Check if the player playing won, by scanning the row, collumn and both diagonal
