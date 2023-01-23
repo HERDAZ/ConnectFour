@@ -87,10 +87,8 @@ class Board:
         l = min(self.width-c[0],c[1]+1)
         # the distance the cursor will have to travel to get to the base of the grid
         c = [c[0]+l-1, c[1]-l+1]
-        print(c, end=' ')
         # create the base coodinate for the right to left diagonal
         l = min(c[0]+1, self.lenght-c[1])
-        print(l)
         # the distance the cursor will have to travel to see the entire diagonal
         # to the tip of the grid
         for i in range(l):
@@ -113,10 +111,8 @@ class Board:
         l = min(c[0]+1,c[1]+1)
         # the distance the cursor will have to travel to get to the base of the grid
         c = [c[0]-l+1, c[1]-l+1]
-        print(c, end='')
         # create the base coordonates for the left to right diagonal
         l = min(self.lenght-c[0], self.width-c[1])
-        print(l)
         # the distance the cursor will have to travel to see the entire diagonal to 
         # the top of the grid
         for i in range(l):
