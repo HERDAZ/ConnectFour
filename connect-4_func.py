@@ -51,14 +51,17 @@ def diagonalIsWin(originalCoord: int, player: int, grid: list, winLenght: int, g
     l = min(gridSize[1]-c[0], c[1]+1)
     # the distance the cursor will have to travel to get to the base of the grid
     c = [c[0]+l-1, c[1]-l+1]
+    print(c, end=' ')
     # create the base coodinate for the right to left diagonal
     l = min(c[0]+1, gridSize[0]-c[1])
+    print(l)
     # the distance the cursor will have to travel to see the entire diagonal
     # to the tip of the grid
     for i in range(l):
         try:
             if grid[c[0]-i][c[1]+i] == player: chain += 1
             # checks if the point at 'grid[c[1]-i][c[0]+i]' is one of the player's piece
+            else: chain = 0
             if chain == winLenght: return True
             # stop the fonction and return True if there is an uniterupted line
             # of four of the player's piece
@@ -72,15 +75,18 @@ def diagonalIsWin(originalCoord: int, player: int, grid: list, winLenght: int, g
     l = min(c[0]+1,c[1]+1)
     # the distance the cursor will have to travel to get to the base of the grid
     c = [c[0]-l+1, c[1]-l+1]
+    print(c, end=' ')
     # create the base coordonates for the left to right diagonal
     l = min(gridSize[0]-c[0],gridSize[1]-c[1])
+    print(l)
     # the distance the cursor will have to travel to see the entire diagonal to 
     # the top of the grid
     for i in range(l):
         try:
-            if grid[c[0]+i][c[0]+i] == player: chain += 1
+            if grid[c[0]+i][c[1]+i] == player: chain += 1
             # check if the point at 'grid[c[1]+i][c[0]+i]' is one of the player's
             # piece
+            else: chain = 0
             if chain == winLenght: return True
             # stop the fonction and return True if ther is an uniterupted line
             # of the player's piece
